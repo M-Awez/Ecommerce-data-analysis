@@ -12,10 +12,15 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    day = int(request.form["day"])
-    
+    day = request.form.get("day")
+
+    if not day:
+        return render_template("index.html", result="Enter a value")
+
+    day = int(day)
+
     prediction = model.predict([[day]])
-    prediction = round(float(prediction), 2)
+    prediction = round(prediction[0][0], 2)
 
     return render_template("index.html", result=prediction)
 
